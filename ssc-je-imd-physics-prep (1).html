@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSC JE / IMD Scientific Assistant — Physics Prep</title>
+<style>
+  :root{
+    --navy:#12283B;
+    --navy-deep:#0B1B29;
+    --teal:#3E8FB0;
+    --amber:#E8A33D;
+    --red:#C1503F;
+    --green:#3D8361;
+    --paper:#F4F2ED;
+    --card:#FFFFFF;
+    --ink:#182430;
+    --muted:#5B6B78;
+    --line:#E1DDD3;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.55;
+  }
+  h1,h2,h3{
+    font-family: Georgia, 'Iowan Old Style', serif;
+    font-weight:600;
+    color:var(--navy-deep);
+    letter-spacing:0.01em;
+  }
+  a{color:var(--teal);}
+  .layout{display:flex; min-height:100vh;}
+
+  /* Sidebar */
+  .sidebar{
+    width:270px;
+    flex-shrink:0;
+    background:var(--navy);
+    color:#EAF1F6;
+    padding:24px 18px;
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+  }
+  .brand{font-family:Georgia, serif; font-size:1.15rem; font-weight:700; color:#fff; margin-bottom:2px;}
+  .brand-sub{font-size:0.78rem; color:#9FB4C4; margin-bottom:22px;}
+  .nav-group{margin-bottom:6px;}
+  .nav-group-title{
+    font-size:0.72rem;
+    color:#7C93A4;
+    margin:18px 0 6px 4px;
+  }
+  .nav-link{
+    display:block;
+    padding:7px 10px;
+    border-radius:7px;
+    color:#D7E4EC;
+    text-decoration:none;
+    font-size:0.88rem;
+    margin-bottom:2px;
+    cursor:pointer;
+    border-left:3px solid transparent;
+  }
+  .nav-link:hover{background:rgba(255,255,255,0.06);}
+  .nav-link.active{background:rgba(232,163,61,0.14); border-left:3px solid var(--amber); color:#fff;}
+
+  /* Main */
+  .main{flex:1; padding:0; max-width:900px;}
+  .hero{
+    background:linear-gradient(180deg, var(--navy) 0%, #1B3A52 55%, #2E5A73 100%);
+    color:#fff;
+    padding:56px 48px 40px;
+  }
+  .hero h1{color:#fff; font-size:2rem; margin:0 0 10px;}
+  .hero p{color:#CFE0E8; max-width:60ch; margin:0 0 18px; font-size:0.98rem;}
+  .honesty-note{
+    background:rgba(255,255,255,0.08);
+    border-left:3px solid var(--amber);
+    padding:12px 16px;
+    border-radius:6px;
+    font-size:0.85rem;
+    color:#EFE6D2;
+    max-width:64ch;
+  }
+
+  .content{padding:36px 48px 80px;}
+  section.unit{margin-bottom:52px; scroll-margin-top:20px;}
+  .unit-label{font-size:0.78rem; color:var(--muted); margin-bottom:4px;}
+  .unit h2{font-size:1.5rem; margin:0 0 14px;}
+  .notes{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px 22px;
+    margin-bottom:20px;
+    font-size:0.94rem;
+  }
+  .notes ul{margin:8px 0; padding-left:20px;}
+  .notes strong{color:var(--navy-deep);}
+
+  .quiz-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+  }
+  .quiz-header h3{font-size:1.05rem; margin:0; color:var(--navy-deep);}
+  .score-pill{
+    font-size:0.8rem;
+    background:var(--navy);
+    color:#fff;
+    padding:4px 10px;
+    border-radius:20px;
+  }
+
+  .question{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px 18px;
+    margin-bottom:14px;
+  }
+  .q-text{font-size:0.94rem; margin-bottom:10px; font-weight:600;}
+  .options{display:flex; flex-direction:column; gap:8px;}
+  .option{
+    text-align:left;
+    padding:9px 12px;
+    border-radius:7px;
+    border:1px solid var(--line);
+    background:#FBFAF7;
+    cursor:pointer;
+    font-size:0.9rem;
+    color:var(--ink);
+  }
+  .option:hover{border-color:var(--teal);}
+  .option.correct{background:#E4F3EA; border-color:var(--green); color:#1E4A32; font-weight:600;}
+  .option.incorrect{background:#FBE9E6; border-color:var(--red); color:#6B241A;}
+  .option.disabled{cursor:default;}
+  .explanation{
+    margin-top:10px;
+    font-size:0.85rem;
+    color:var(--muted);
+    background:#F6F5F1;
+    border-radius:6px;
+    padding:8px 12px;
+    display:none;
+  }
+  .explanation.show{display:block;}
+
+  .top-progress{
+    position:sticky; top:0; z-index:5;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    padding:10px 48px;
+    font-size:0.82rem;
+    color:var(--muted);
+  }
+  footer{padding:30px 48px 60px; color:var(--muted); font-size:0.82rem; border-top:1px solid var(--line);}
+
+  @media(max-width:800px){
+    .layout{flex-direction:column;}
+    .sidebar{width:100%; height:auto; position:relative;}
+    .hero, .content{padding-left:22px; padding-right:22px;}
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <nav class="sidebar" id="sidebar">
+    <div class="brand">SSC JE · IMD Physics</div>
+    <div class="brand-sub">Scientific Assistant (Part-F) prep notes</div>
+
+    <div class="nav-group-title">Paper 1 — Common</div>
+    <a class="nav-link" data-target="sec-reasoning">Reasoning &amp; Awareness</a>
+
+    <div class="nav-group-title">Physics — Part F</div>
+    <a class="nav-link" data-target="sec-u1">1. Mathematical Methods</a>
+    <a class="nav-link" data-target="sec-u2">2. Mechanics</a>
+    <a class="nav-link" data-target="sec-u3">3. Properties of Matter</a>
+    <a class="nav-link" data-target="sec-u4">4. Oscillations</a>
+    <a class="nav-link" data-target="sec-u5">5. Waves</a>
+    <a class="nav-link" data-target="sec-u6">6. Optics</a>
+    <a class="nav-link" data-target="sec-u7">7. Electricity</a>
+    <a class="nav-link" data-target="sec-u8">8. Magnetism</a>
+    <a class="nav-link" data-target="sec-u9">9. Kinetic Theory</a>
+    <a class="nav-link" data-target="sec-u10">10. Thermodynamics</a>
+    <a class="nav-link" data-target="sec-u11">11. Modern Physics</a>
+    <a class="nav-link" data-target="sec-u12">12. Solid State Physics</a>
+    <a class="nav-link" data-target="sec-u13">13. Semiconductor Devices</a>
+    <a class="nav-link" data-target="sec-u14">14. Analog &amp; Digital Electronics</a>
+  </nav>
+
+  <div class="main">
+    <div class="hero">
+      <h1>Scientific Assistant (IMD) — Physics Prep</h1>
+      <p>Complete Part-F syllabus, unit by unit, with plain-language explanations and practice MCQs with instant feedback.</p>
+      <div class="honesty-note">
+        This exam stream is new for 2026, so no genuine "5-year official PYQ" set exists for this exact paper yet. The MCQs here are original practice questions written to match the real syllabus and the difficulty level of similar exams (GATE/CSIR-NET Physics, older SSC JE papers) — not copied leaked papers.
+      </div>
+    </div>
+
+    <div class="top-progress">Total score this session: <span id="global-score">0</span> / <span id="global-total">0</span> answered correctly</div>
+
+    <div class="content" id="content"></div>
+
+    <footer>Built for personal exam prep. Static file — safe to host on your own site.</footer>
+  </div>
+</div>
+
+<script>
+const DATA = [
+  {
+    id:"sec-reasoning",
+    label:"Paper 1",
+    title:"General Intelligence, Reasoning &amp; General Awareness",
+    notes:`
+      <h4>Analogies</h4>
+      <p>You're given a pair of words/numbers/shapes with a hidden relationship, and must find the same relationship in another pair. Step 1: say the relationship out loud in one sentence ("A is a type of B", "A is used to make B", "A is smaller unit of B", "A is the profession, B is the tool"). Step 2: apply that exact sentence to each option and see which one fits without stretching. Common relationship types: part-whole (Wheel:Car), cause-effect (Fire:Smoke), worker-tool (Carpenter:Saw), degree (Warm:Hot), function (Pen:Write).</p>
+
+      <h4>Number &amp; Letter Series</h4>
+      <p>Look for a pattern in this order: (1) simple addition/subtraction difference between terms, (2) difference-of-differences (second order pattern), (3) multiplication/division ratio, (4) alternating two interleaved series, (5) squares/cubes/primes. For letter series, convert letters to their alphabet position number (A=1...Z=26) and look for the same numeric patterns.</p>
+
+      <h4>Coding-Decoding</h4>
+      <p>Usually each letter of a word is shifted by a fixed number of positions in the alphabet (e.g., +1, +2, or a mix). Find the shift used on the letters you're given, then apply the identical shift to the new word. Sometimes it's a substitution code (a fixed letter/symbol always represents another) rather than a shift — check both.</p>
+
+      <h4>Blood Relations</h4>
+      <p>Never solve in your head. Draw a small family tree as you read each clause: draw a symbol for each person, connect them with the stated relation (parent, sibling, spouse), and only look up the answer once the diagram is complete. Common trap: gender-neutral terms like "child" or "cousin" — don't assume gender unless stated.</p>
+
+      <h4>Direction Sense</h4>
+      <p>Draw a cross (N-S-E-W) on paper. Mark the starting point, then move step by step exactly as described, redrawing your position after every turn ("turn right" means turn 90° clockwise from current facing direction). At the end, measure straight-line distance/direction back to start using basic geometry (often forms a right triangle — use Pythagoras if asked for shortest distance).</p>
+
+      <h4>Classification (Odd One Out)</h4>
+      <p>Look for the shared category among most items (all fruits, all prime numbers, all mammals) — the item that breaks that category is the answer. Watch for questions with two valid-seeming patterns; check which category fits the *most* items cleanly.</p>
+
+      <h4>General Awareness — what to actually revise</h4>
+      <p><strong>Polity:</strong> Structure of the Constitution, Fundamental Rights (Articles 12-35) and Duties, how a bill becomes law, powers of President/PM/Governor, Panchayati Raj basics.</p>
+      <p><strong>Geography:</strong> Major rivers and the states they flow through, mountain ranges, states and capitals, the Indian monsoon system (very relevant here since you're applying to IMD — know how SW and NE monsoons work, when they arrive/retreat).</p>
+      <p><strong>History:</strong> Key dates and figures of the freedom movement, important movements (Non-Cooperation, Quit India), post-independence milestones.</p>
+      <p><strong>Economy:</strong> Five-Year Plans (concept, though discontinued after 2017), GDP vs GNP basics, RBI's core functions (monetary policy, currency issue, banker to government).</p>
+      <p><strong>Science in the news:</strong> ISRO missions, major health/tech current events — and specifically, IMD's own role and recent initiatives, since interviewers/exam-setters for this post like testing domain awareness.</p>
+      <p><strong>Current affairs:</strong> Cover the 6-12 months directly before your actual exam date — appointments, awards, sports events, government schemes. This part goes stale fast, so revise it last, closest to exam day.</p>`,
+    questions:[
+      {q:"Doctor : Hospital :: Teacher : ?", options:["Chalk","School","Student","Book"], a:1, e:"A professional works at their workplace."},
+      {q:"3 : 9 :: 5 : ?", options:["10","15","20","25"], a:3, e:"Pattern is n : n² (5²=25)."},
+      {q:"2, 6, 12, 20, 30, ?", options:["40","42","44","36"], a:1, e:"Differences: 4,6,8,10,12 → 30+12=42."},
+      {q:"If SUN is coded as TVO, how is MOON coded?", options:["NPPO","NPPP","NPOO","NQPO"], a:0, e:"Each letter shifts +1: S→T,U→V,N→O. So M→N,O→P,O→P,N→O = NPPO."},
+      {q:"A is B's brother. C is B's mother. D is C's father. How is A related to D?", options:["Son","Grandson","Nephew","Cousin"], a:1, e:"A is C's child; D is C's father, so D is A's grandfather → A is D's grandson."},
+      {q:"Who is known as the Father of the Indian Constitution?", options:["Mahatma Gandhi","Dr. B.R. Ambedkar","Jawaharlal Nehru","Sardar Patel"], a:1, e:"Dr. B.R. Ambedkar chaired the Drafting Committee."},
+      {q:"Which agency is responsible for weather forecasting in India?", options:["ISRO","IMD","DRDO","CSIR"], a:1, e:"India Meteorological Department, under Ministry of Earth Sciences."},
+      {q:"The southwest monsoon typically first arrives over Kerala around:", options:["Early June","Early March","Late October","Early January"], a:0, e:"Onset over Kerala is usually around June 1."}
+    ]
+  },
+  {
+    id:"sec-u1", label:"Unit 1", title:"Mathematical Methods",
+    notes:`
+    <h4>Calculus (Differentiation &amp; Integration)</h4>
+    <p>Differentiation tells you the rate of change of a function — how fast something is changing at an instant (e.g., velocity is the derivative of position). Integration is the reverse: it accumulates a rate to find a total (e.g., position from velocity, or area under a curve). Know these cold: d/dx(xⁿ)=nxⁿ⁻¹, d/dx(sin x)=cos x, d/dx(cos x)=−sin x, d/dx(eˣ)=eˣ, d/dx(ln x)=1/x. For integration: ∫xⁿdx = xⁿ⁺¹/(n+1), ∫sin x dx = −cos x, ∫cos x dx = sin x, ∫eˣdx = eˣ.</p>
+
+    <h4>Differential Equations</h4>
+    <p>An equation involving a function and its derivatives — physics is full of these because most laws describe *rates* of change (e.g., Newton's second law, F=ma, is a differential equation since a=d²x/dt²). The most important one for this exam is the SHM equation: d²x/dt² = −ω²x, whose solution is x = A sin(ωt+φ). You don't need to solve complex ones from scratch — just recognize the standard forms and their standard solutions.</p>
+
+    <h4>Fourier Series &amp; Taylor Expansion</h4>
+    <p>Fourier series lets you write any periodic function (like a square wave) as a sum of simple sines and cosines — used to analyze complex waveforms in electronics. Taylor expansion approximates a complicated function near a point using a polynomial (e.g., sin x ≈ x for small x) — this "small angle approximation" is used constantly in pendulum/oscillation problems.</p>
+
+    <h4>Vector Algebra &amp; Vector Calculus</h4>
+    <p>A vector has both magnitude and direction (force, velocity, field). Dot product (A·B = |A||B|cosθ) gives a scalar and measures "how much one vector points along another" — used for work done (W = F·d). Cross product (A×B = |A||B|sinθ, direction by right-hand rule) gives a vector perpendicular to both — used for torque and magnetic force. Vector calculus operators — gradient, divergence, curl — describe how fields change in space and appear directly in Maxwell's equations.</p>
+
+    <h4>Linear Algebra</h4>
+    <p>Deals with matrices and systems of linear equations — used in quantum mechanics (operators, eigenvalues) and solving coupled physical systems. Know how to multiply matrices and find a 2x2 determinant (ad−bc).</p>
+
+    <h4>Complex Numbers</h4>
+    <p>A complex number z = a+ib has a real part a and imaginary part b (i=√−1). Its modulus |z|=√(a²+b²) represents its "size." Complex numbers make AC circuit analysis dramatically simpler (impedance is treated as a complex number) and are fundamental to quantum mechanics wavefunctions.</p>
+
+    <h4>Statistics &amp; Error Analysis</h4>
+    <p>Mean, standard deviation, and probability distributions describe scattered experimental data. Error analysis is about how uncertainty in your measured inputs propagates into uncertainty in your final calculated answer — important in any lab-based or observational science, including meteorological measurement.</p>`,
+    questions:[
+      {q:"d/dx (sin x · cos x) = ?", options:["cos 2x","-sin 2x","sin²x","cos²x"], a:0, e:"Product rule gives cos²x − sin²x = cos 2x."},
+      {q:"∫₀^π sin(x) dx = ?", options:["0","1","2","π"], a:2, e:"Standard integral evaluates to 2."},
+      {q:"If A = 3i + 4j, |A| = ?", options:["5","7","12","25"], a:0, e:"√(3²+4²) = 5."},
+      {q:"A · B = 0 means the vectors are:", options:["Parallel","Perpendicular","Equal","Opposite"], a:1, e:"Dot product is zero when angle is 90°."},
+      {q:"The modulus of the complex number 3+4i is:", options:["3","4","5","7"], a:2, e:"√(3²+4²) = 5."}
+    ]
+  },
+  {
+    id:"sec-u2", label:"Unit 2", title:"Mechanics",
+    notes:`
+    <h4>Newton's Laws of Motion</h4>
+    <p><strong>First law (inertia):</strong> an object stays at rest or moves at constant velocity unless acted on by a net force. <strong>Second law:</strong> F = ma — force equals mass times acceleration; this is the master equation you'll apply again and again. <strong>Third law:</strong> every action has an equal and opposite reaction — forces always come in pairs acting on different bodies.</p>
+
+    <h4>Coordinate Systems &amp; Kinematics</h4>
+    <p>Motion can be described in Cartesian (x,y,z), polar (r,θ), or spherical coordinates depending on the symmetry of the problem — circular motion is far easier in polar coordinates than Cartesian. Kinematics is describing motion (position, velocity, acceleration) without worrying about what causes it.</p>
+
+    <h4>Inertial vs Non-Inertial Frames</h4>
+    <p>An inertial frame is one where Newton's laws hold in their simple form (no acceleration of the frame itself). A non-inertial frame (like a rotating platform, or the rotating Earth) requires adding "fictitious" forces to make Newton's laws work: <strong>centrifugal force</strong> (apparent outward push in a rotating frame) and <strong>Coriolis force</strong> (apparent sideways deflection of moving objects in a rotating frame — this is exactly why cyclones spin and winds curve on Earth, directly relevant to meteorology).</p>
+
+    <h4>Motion Under a Central Force &amp; Kepler's Laws</h4>
+    <p>A central force always points toward (or away from) a fixed point (like the Sun) — this makes angular momentum conserved, which is why planets sweep equal areas in equal times (Kepler's 2nd law). Kepler's 1st law: orbits are ellipses with the Sun at one focus. Kepler's 3rd law: T² ∝ r³ (orbital period squared is proportional to the semi-major axis cubed) — this links directly to Newton's law of gravitation, F = Gm₁m₂/r².</p>
+
+    <h4>Conservative vs Non-Conservative Forces</h4>
+    <p>A conservative force (gravity, spring force) does work that depends only on start/end position, not the path taken — energy is fully recoverable, and you can define a potential energy for it. A non-conservative force (friction, air drag) dissipates energy as heat — work done depends on the path.</p>
+
+    <h4>System of Particles &amp; Conservation Laws</h4>
+    <p>For any system with no external force, total momentum is conserved. With no external torque, total angular momentum is conserved. With only conservative forces acting, total mechanical energy is conserved. These three conservation laws are the most powerful problem-solving shortcuts in mechanics — always check which one applies before grinding through F=ma.</p>
+
+    <h4>Elastic vs Inelastic Collisions</h4>
+    <p>In an <strong>elastic</strong> collision, both momentum and kinetic energy are conserved (like billiard balls). In an <strong>inelastic</strong> collision, momentum is conserved but kinetic energy is not (some converts to heat/sound/deformation) — a "perfectly inelastic" collision is when the objects stick together afterward.</p>
+
+    <h4>Moment of Inertia &amp; Rigid Body Dynamics</h4>
+    <p>Moment of inertia (I) is the rotational equivalent of mass — it measures resistance to a change in rotational motion, and depends on both mass and how that mass is distributed relative to the axis. Standard values: solid disc about its axis = ½MR², ring = MR², solid sphere about diameter = ⅖MR². Rotational analogues of linear equations: torque τ=Iα (like F=ma), angular momentum L=Iω (like p=mv), rotational KE=½Iω² (like ½mv²).</p>`,
+    questions:[
+      {q:"A 2 kg mass moving at 3 m/s sticks to a stationary 1 kg mass. Final velocity?", options:["1 m/s","2 m/s","3 m/s","4 m/s"], a:1, e:"Momentum: 2×3 = 3×v → v = 2 m/s."},
+      {q:"Moment of inertia of a solid sphere about its diameter:", options:["MR²","½MR²","⅖MR²","⅔MR²"], a:2, e:"Standard result for a solid sphere."},
+      {q:"Coriolis force arises due to:", options:["Gravity","Earth's rotation","Friction","Air resistance"], a:1, e:"Very relevant for IMD — it's why cyclones curve."},
+      {q:"Kepler's second law states:", options:["Equal areas in equal time","T²∝r³","Orbits are elliptical","F∝1/r²"], a:0, e:"The law of areas — planet sweeps equal area in equal time."},
+      {q:"In an elastic collision:", options:["Only momentum is conserved","Only KE is conserved","Both momentum and KE are conserved","Neither is conserved"], a:2, e:"Defining feature of an elastic collision."},
+      {q:"Centripetal acceleration for radius r, speed v is:", options:["v/r","v²/r","vr","v²r"], a:1, e:"Standard formula a = v²/r."}
+    ]
+  },
+  {
+    id:"sec-u3", label:"Unit 3", title:"General Properties of Matter",
+    notes:`
+    <h4>Elasticity</h4>
+    <p>When you apply stress (force per unit area) to a solid, it deforms by some strain (fractional change in shape). Below the "elastic limit," the object returns to its original shape once the force is removed. Young's modulus Y = stress/strain measures stiffness for stretching/compression; higher Y means a stiffer material.</p>
+
+    <h4>Surface Tension</h4>
+    <p>Molecules at a liquid's surface are pulled inward more than sideways, causing the surface to behave like a stretched elastic membrane — this is why small water drops are spherical (minimum surface area for given volume) and why capillary rise happens in thin tubes (surface tension pulls liquid up against gravity).</p>
+
+    <h4>Viscosity</h4>
+    <p>Viscosity is a fluid's internal resistance to flow — honey is far more viscous than water. Stokes' law (F = 6πηrv) gives the viscous drag force on a small sphere moving through a fluid, and is used to find terminal velocity (the constant speed reached when drag balances gravity).</p>
+
+    <h4>Fluid Dynamics: Continuity &amp; Bernoulli</h4>
+    <p>The <strong>equation of continuity</strong> (A₁v₁ = A₂v₂) says that for an incompressible fluid, if the pipe narrows, the fluid must speed up to keep the same volume flowing per second. <strong>Bernoulli's theorem</strong> (P + ½ρv² + ρgh = constant along a streamline) is essentially energy conservation for flowing fluids — where the fluid moves faster, pressure drops. This principle underlies aircraft lift and is conceptually the same physics behind pressure differences that drive wind (relevant background for meteorology).</p>
+
+    <h4>Euler's Equation</h4>
+    <p>A more general equation of motion for a fluid element, relating pressure gradient, gravity, and acceleration of the fluid — Bernoulli's equation is actually a simplified, integrated form of Euler's equation for steady, non-viscous flow.</p>`,
+    questions:[
+      {q:"Bernoulli's theorem is based on conservation of:", options:["Momentum","Energy","Mass","Charge"], a:1, e:"It's essentially energy conservation for flowing fluids."},
+      {q:"If a pipe narrows, fluid velocity:", options:["Increases","Decreases","Stays same","Becomes zero"], a:0, e:"From the equation of continuity A₁v₁=A₂v₂."},
+      {q:"Surface tension is responsible for:", options:["Capillary rise","Viscosity","Elasticity","Diffusion"], a:0, e:"Capillary action arises from surface tension effects."},
+      {q:"Stokes' law gives viscous force on a:", options:["Flat plate","Sphere moving through a fluid","Cylinder","Cube"], a:1, e:"F = 6πηrv applies to a sphere."},
+      {q:"Young's modulus is the ratio of:", options:["Shear stress to shear strain","Longitudinal stress to longitudinal strain","Pressure to volume strain","Force to area"], a:1, e:"Defines Young's modulus specifically."}
+    ]
+  },
+  {
+    id:"sec-u4", label:"Unit 4", title:"Oscillations",
+    notes:`
+    <h4>Simple Harmonic Motion (SHM)</h4>
+    <p>SHM is motion where the restoring force is directly proportional to displacement from equilibrium, and always points back toward equilibrium (F = −kx). This gives x(t) = A sin(ωt+φ), where A is amplitude, ω=√(k/m) is angular frequency, and φ is initial phase. Velocity and acceleration in SHM are v = Aω cos(ωt+φ) and a = −Aω²sin(ωt+φ) — note velocity leads displacement by 90°, and acceleration is exactly opposite in phase to displacement.</p>
+
+    <h4>Energy in SHM</h4>
+    <p>Total mechanical energy = ½kA² and stays constant throughout the motion, but it continuously trades between kinetic energy (max at the mean/equilibrium position) and potential energy (max at the extreme positions, zero velocity there).</p>
+
+    <h4>Superposition of SHMs &amp; Lissajous Figures</h4>
+    <p>When two SHMs act on a particle simultaneously (e.g., along perpendicular directions), the resulting path traced depends on their frequency ratio and phase difference — these traced patterns are called Lissajous figures, used practically to compare two frequencies (e.g., on an oscilloscope).</p>
+
+    <h4>Damped Oscillations</h4>
+    <p>Real oscillators lose energy to friction/air resistance, so amplitude decreases over time (typically exponentially): x(t) = A₀e^(−bt/2m) sin(ωt+φ). Depending on the damping strength, systems are underdamped (oscillates while dying out), critically damped (returns to equilibrium fastest without oscillating), or overdamped (returns slowly without oscillating).</p>
+
+    <h4>Forced Oscillations &amp; Resonance</h4>
+    <p>When an external periodic force drives an oscillator, the system eventually oscillates at the driving frequency, not its own natural frequency. When the driving frequency matches the natural frequency, amplitude becomes maximum — this is <strong>resonance</strong> (classic real-world example: a bridge or building responding dangerously to wind/earthquake vibrations at its natural frequency).</p>
+
+    <h4>Quality Factor (Q) &amp; Bandwidth</h4>
+    <p>The Q factor measures how "sharp" or narrow the resonance peak is, and relates to how quickly a freely oscillating system loses energy. High Q means low damping, sharp resonance, and narrow bandwidth (the range of driving frequencies that still produce a strong response); low Q means the opposite.</p>`,
+    questions:[
+      {q:"Time period of SHM depends on:", options:["Amplitude","Mass and spring constant","Initial phase","Total energy"], a:1, e:"T = 2π√(m/k), independent of amplitude."},
+      {q:"At the mean position in SHM, kinetic energy is:", options:["Zero","Maximum","Minimum but not zero","Equal to PE"], a:1, e:"All energy is kinetic at the mean position."},
+      {q:"Resonance occurs when:", options:["Driving frequency = 0","Driving frequency = natural frequency","Damping is maximum","Amplitude is zero"], a:1, e:"Maximum amplitude response occurs at this match."},
+      {q:"Phase difference between velocity and displacement in SHM is:", options:["0","π/2","π","2π"], a:1, e:"Velocity leads displacement by 90°."},
+      {q:"A higher Q factor means:", options:["More damping","A sharper resonance peak","Lower amplitude","No oscillation"], a:1, e:"Q measures sharpness of the resonance curve."}
+    ]
+  },
+  {
+    id:"sec-u5", label:"Unit 5", title:"Waves",
+    notes:`
+    <h4>The Wave Equation &amp; Travelling Waves</h4>
+    <p>A wave is a disturbance that transports energy through a medium without transporting matter. A travelling wave is described by y(x,t)=A sin(kx−ωt), where k is the wave number (2π/λ) and ω is angular frequency (2π/T). The fundamental relation is v = fλ — speed equals frequency times wavelength.</p>
+
+    <h4>Standing Waves</h4>
+    <p>When two identical waves travel in opposite directions (e.g., a wave and its reflection) they superpose to form a standing wave, which doesn't actually travel — it has fixed points of zero displacement (<strong>nodes</strong>) and fixed points of maximum displacement (<strong>antinodes</strong>). This is how musical instrument strings and air columns produce specific resonant tones.</p>
+
+    <h4>Energy Density &amp; Energy Transmission</h4>
+    <p>Energy density is the energy carried per unit length/volume of the wave, proportional to the square of amplitude and square of frequency. The rate of energy transmission (intensity) also depends on wave speed — this is why louder/more energetic waves have bigger amplitude, not higher speed.</p>
+
+    <h4>Group Velocity vs Phase Velocity</h4>
+    <p><strong>Phase velocity</strong> is the speed of a single pure frequency wave crest. <strong>Group velocity</strong> is the speed of the overall "envelope" or packet formed by a group of waves of slightly different frequencies overlapping — and it's group velocity that actually carries information/energy in most real signals. In a non-dispersive medium these are equal; in a dispersive medium they differ.</p>
+
+    <h4>Sound Waves</h4>
+    <p>Sound is a longitudinal mechanical wave — the medium's particles vibrate parallel to the direction of wave travel, creating alternating compressions and rarefactions. Speed of sound depends on the medium's elasticity and density.</p>
+
+    <h4>Doppler Effect</h4>
+    <p>The observed frequency of a wave changes when the source and observer are moving relative to each other: frequency increases as they approach, decreases as they separate. Formula: f' = f(v±v₀)/(v∓vₛ), where v is wave speed, v₀ is observer's speed, vₛ is source's speed (signs depend on direction of motion). This principle is the basis of Doppler weather radar, which measures the velocity of rain/wind by the frequency shift of the reflected radar signal — directly relevant to your future work at IMD.</p>`,
+    questions:[
+      {q:"If frequency doubles and wave speed is constant, wavelength:", options:["Doubles","Halves","Stays same","Quadruples"], a:1, e:"From v=fλ, λ and f are inversely related."},
+      {q:"Nodes in a standing wave are points of:", options:["Maximum amplitude","Zero amplitude","Maximum energy","Maximum velocity"], a:1, e:"Nodes are points that never move."},
+      {q:"The Doppler effect explains:", options:["Change in wave speed","Apparent frequency change due to relative motion","Wave interference","Diffraction"], a:1, e:"Classic definition of the Doppler effect."},
+      {q:"Sound waves in air are:", options:["Transverse","Longitudinal","Electromagnetic","Polarized"], a:1, e:"Sound propagates via compressions and rarefactions."},
+      {q:"Group velocity refers to:", options:["Velocity of an individual wave","Velocity of a wave packet/envelope","Always equal to phase velocity","Speed of light"], a:1, e:"Group velocity is the speed of the overall envelope/packet."}
+    ]
+  },
+  {
+    id:"sec-u6", label:"Unit 6", title:"Optics",
+    notes:`
+    <h4>Geometrical Optics: Fermat's Principle, Reflection &amp; Refraction</h4>
+    <p>Fermat's principle says light travels between two points along the path that takes the least time — reflection and refraction laws (Snell's law) can both be derived from this single idea. Mirror/lens formula: 1/v + 1/u = 1/f (with proper sign convention for real/virtual, concave/convex). Magnification m = v/u (mirrors) or v/u (lenses, with appropriate signs) tells you image size relative to object.</p>
+
+    <h4>Image Formation</h4>
+    <p>Whether an image is real or virtual, upright or inverted, and magnified or diminished depends on where the object sits relative to the focal point — this is standard ray-diagram territory: learn the few cases for concave mirrors/convex lenses (object beyond 2F, between F and 2F, at F, inside F) rather than memorizing outcomes by rote.</p>
+
+    <h4>Wave Optics: Interference</h4>
+    <p>When two coherent light waves overlap, they reinforce (constructive interference — bright fringe) where they're in phase, and cancel (destructive interference — dark fringe) where they're out of phase. Young's double-slit experiment is the classic demonstration, and confirmed light's wave nature. Path difference = nλ gives bright fringes; (n+½)λ gives dark fringes.</p>
+
+    <h4>Diffraction</h4>
+    <p>Diffraction is the bending/spreading of waves around obstacles or through small openings — it becomes noticeable when the opening size is comparable to the wavelength. A diffraction grating (many closely spaced slits) produces sharp, well-separated bright fringes, useful for precisely measuring wavelengths.</p>
+
+    <h4>Rayleigh Criterion &amp; Resolving Power</h4>
+    <p>Two closely spaced objects (like two stars) can only be distinguished as separate if their diffraction patterns don't overlap too much — the Rayleigh criterion defines the minimum angular separation for this. Resolving power (ability to distinguish fine detail) improves with a larger aperture and shorter wavelength — this is why telescopes use large mirrors/lenses.</p>
+
+    <h4>Polarization</h4>
+    <p>Ordinary light vibrates in all directions perpendicular to its travel direction; polarization restricts vibration to a single plane (linear), a rotating pattern (circular), or an elongating rotating pattern (elliptical). Malus's law gives the intensity transmitted through a polarizer: I = I₀cos²θ, where θ is the angle between the light's polarization and the polarizer's axis. Some crystals show double refraction (birefringence) — splitting a light ray into two differently polarized rays travelling at different speeds — and optical rotation is when certain substances rotate the plane of polarized light passing through them.</p>`,
+    questions:[
+      {q:"The mirror formula is:", options:["1/v + 1/u = 1/f","1/v − 1/u = 1/f","v + u = f","vu = f"], a:0, e:"Standard mirror/lens formula."},
+      {q:"Young's double slit experiment demonstrates:", options:["Diffraction","Interference","Polarization","Dispersion"], a:1, e:"It's the classic interference experiment."},
+      {q:"Resolving power of a telescope increases with:", options:["Smaller aperture","Larger aperture","Longer wavelength","Lower magnification"], a:1, e:"Larger aperture improves resolving power."},
+      {q:"Malus's law relates to:", options:["Diffraction","Polarization intensity","Refraction","Interference"], a:1, e:"Malus's law gives transmitted intensity through a polarizer."},
+      {q:"A diffraction grating produces:", options:["A single bright spot","Multiple sharp bright fringes","No pattern","Continuous spectrum only"], a:1, e:"Multiple slits create sharp, well-separated maxima."}
+    ]
+  },
+  {
+    id:"sec-u7", label:"Unit 7", title:"Electricity",
+    notes:`
+    <h4>Coulomb's Law &amp; Electric Field</h4>
+    <p>The force between two point charges is F = kq₁q₂/r² — it's an inverse-square law, just like gravity, but can be attractive or repulsive depending on charge signs. Electric field E = F/q is the force per unit positive test charge at a point, and field lines visualize its direction and strength (denser lines = stronger field).</p>
+
+    <h4>Electric Potential &amp; Gauss's Law</h4>
+    <p>Electric potential is potential energy per unit charge; it decreases as you move away from a positive charge, and the field always points from high to low potential. Gauss's law states that electric flux through any closed surface equals the enclosed charge divided by ε₀ — this is enormously useful for finding fields around symmetric objects (spheres, cylinders, infinite sheets) without messy integration.</p>
+
+    <h4>Conductors, Dielectrics &amp; Capacitors</h4>
+    <p>Inside a conductor in equilibrium, the electric field is zero and charge resides only on the surface. A dielectric (insulator) placed in a field becomes polarized — its molecules slightly separate charge, creating "bound charges" that partially oppose the external field, which is why inserting a dielectric increases a capacitor's capacitance. Capacitance C = Q/V measures how much charge a capacitor stores per volt; series combination adds reciprocals (1/C_total=Σ1/Cᵢ), parallel combination adds directly (C_total=ΣCᵢ). Energy stored = ½CV².</p>
+
+    <h4>Boundary Value Problems &amp; Laplace's Equation</h4>
+    <p>In regions with no charge, electric potential satisfies Laplace's equation (∇²V=0); solving it with the specific boundary conditions of a problem (shapes/values of nearby conductors) gives the potential everywhere in that region — a standard technique in advanced electrostatics.</p>
+
+    <h4>Current Electricity</h4>
+    <p>Current I is the rate of charge flow; current density J is current per unit cross-sectional area. Ohm's law (V=IR) says voltage is proportional to current for many materials (resistance R being the constant of proportionality) — though not all materials are "ohmic."</p>
+
+    <h4>DC Circuits</h4>
+    <p>Kirchhoff's current law (charge conservation at a junction) and voltage law (energy conservation around a loop) let you solve any DC circuit for unknown currents/voltages. Resistors in series add directly; in parallel, reciprocals add.</p>
+
+    <h4>AC Circuits: RC, LC, LCR &amp; Resonance</h4>
+    <p>In AC circuits, capacitors and inductors resist current in a frequency-dependent way, described by <strong>reactance</strong> (capacitive reactance Xc=1/ωC decreases with frequency; inductive reactance XL=ωL increases with frequency). In a series LCR circuit, <strong>resonance</strong> occurs when XL=XC, at which point impedance is minimum (purely resistive) and current is maximum — this is the same resonance concept as in mechanical oscillators, and it's the basis of radio tuning circuits.</p>`,
+    questions:[
+      {q:"Coulomb's law force is proportional to:", options:["Product of charges / r","Product of charges / r²","Sum of charges / r²","Charges × r²"], a:1, e:"Inverse-square law, like gravitation."},
+      {q:"Gauss's law relates electric flux to:", options:["Electric field alone","Enclosed charge","Potential","Capacitance"], a:1, e:"Flux through a closed surface = enclosed charge / ε₀."},
+      {q:"In series combination, capacitance:", options:["Adds directly","Has reciprocals add","Stays same","Becomes zero"], a:1, e:"1/C_total = 1/C1 + 1/C2 + ..."},
+      {q:"At resonance in an LCR circuit:", options:["XL > XC","XL < XC","XL = XC","R = 0"], a:2, e:"Resonance condition is XL = XC."},
+      {q:"Ohm's law states:", options:["V = IR","V = I/R","V = I²R","I = VR"], a:0, e:"Basic relation between voltage, current, and resistance."}
+    ]
+  },
+  {
+    id:"sec-u8", label:"Unit 8", title:"Magnetism",
+    notes:`
+    <h4>Sources of Magnetic Field: Biot-Savart &amp; Ampere's Law</h4>
+    <p>The Biot-Savart law calculates the magnetic field produced by a small current-carrying element — sum (integrate) these contributions to find the field of any current distribution. Ampere's circuital law is a shortcut for symmetric current distributions: the loop integral of B around a closed path equals μ₀ times the enclosed current — much like Gauss's law does for electric fields.</p>
+
+    <h4>Magnetic Vector Potential</h4>
+    <p>Just as electric field can be derived from a scalar potential, magnetic field can be derived from a vector potential A (B=∇×A) — a mathematical tool that simplifies certain magnetism and electromagnetic wave problems.</p>
+
+    <h4>Lorentz Force &amp; Charged Particle Motion</h4>
+    <p>The total force on a charge in both electric and magnetic fields is F=qE+qv×B (the Lorentz force). The magnetic part is always perpendicular to velocity, so it changes direction but never speed — this makes a charged particle move in a circle (or helix, if there's also velocity along B) in a uniform magnetic field. This is the working principle behind particle accelerators, mass spectrometers, and radiation belts trapping charged particles around Earth.</p>
+
+    <h4>Electromagnetic Induction</h4>
+    <p>Faraday's law: a changing magnetic flux through a loop induces an EMF (voltage) in that loop — EMF = −dΦ/dt. Lenz's law (the minus sign) says the induced current always flows in a direction that opposes the change causing it (conservation of energy). This is the working principle of every electric generator and transformer.</p>
+
+    <h4>Self &amp; Mutual Inductance</h4>
+    <p>Self-inductance is a circuit's own opposition to a change in its own current (it "fights back" against sudden changes). Mutual inductance is when a changing current in one coil induces an EMF in a nearby second coil — the basis of transformers.</p>
+
+    <h4>Maxwell's Equations, Displacement Current &amp; EM Waves</h4>
+    <p>Maxwell unified electricity and magnetism into four equations. His key addition was the "displacement current" — recognizing that a changing electric field itself acts like a current source for a magnetic field, completing the symmetry between electricity and magnetism. This symmetry predicts self-sustaining electromagnetic waves that travel at the speed of light — showing light itself is an EM wave. The <strong>Poynting vector</strong> (S = E×B/μ₀) gives the direction and rate of energy flow carried by an EM wave. EM waves can also reflect and transmit at boundaries between different media, similar to light hitting a mirror or glass surface.</p>`,
+    questions:[
+      {q:"The Lorentz force on a moving charge in a magnetic field is:", options:["qE","qv×B","qvB²","qB/v"], a:1, e:"F = qv×B is the magnetic part of the Lorentz force."},
+      {q:"Faraday's law states EMF is induced due to:", options:["Constant magnetic flux","Changing magnetic flux","Constant current","Zero flux"], a:1, e:"EMF = -dΦ/dt, requires a changing flux."},
+      {q:"Maxwell's equations predict the existence of:", options:["Sound waves","Electromagnetic waves","Gravitational waves","Matter waves"], a:1, e:"They show EM waves travel at the speed of light."},
+      {q:"The Poynting vector represents:", options:["Charge density","Direction and magnitude of EM energy flow","Magnetic field only","Electric potential"], a:1, e:"S = E×B/μ₀ gives energy flux of an EM wave."},
+      {q:"Self-inductance opposes:", options:["Change in current","Change in voltage","Resistance","Capacitance"], a:0, e:"Lenz's law: induced EMF opposes the change causing it."}
+    ]
+  },
+  {
+    id:"sec-u9", label:"Unit 9", title:"Kinetic Theory",
+    notes:`
+    <h4>Kinetic Theory Postulates &amp; the Ideal Gas Equation</h4>
+    <p>Gas is modelled as a huge number of tiny particles in constant random motion, colliding elastically with each other and the container walls; pressure is simply the average force per unit area from these countless wall collisions. This microscopic picture leads directly to the macroscopic ideal gas equation PV=nRT (or PV=NkT using the number of molecules).</p>
+
+    <h4>Degrees of Freedom &amp; Equipartition Theorem</h4>
+    <p>A degree of freedom is an independent way a molecule can store energy (e.g., moving in x, y, or z direction, or rotating about an axis). The equipartition theorem states each degree of freedom carries, on average, ½kT of energy. A monoatomic gas (like Helium) has 3 translational degrees of freedom → average energy (3/2)kT. A diatomic gas adds 2 rotational degrees of freedom → around (5/2)kT (at moderate temperatures, before vibration kicks in).</p>
+
+    <h4>Specific Heats of Gases</h4>
+    <p>Because degrees of freedom determine how much energy a gas can absorb for a given temperature rise, specific heat differs by gas type: monoatomic gases have lower specific heat than diatomic or triatomic gases, which have more ways to store energy.</p>
+
+    <h4>Maxwell's Velocity Distribution</h4>
+    <p>Not all gas molecules move at the same speed — Maxwell's distribution describes the statistical spread of molecular speeds at a given temperature. Three characteristic speeds emerge from this distribution, in increasing order: <strong>most probable speed</strong> (the peak of the curve) &lt; <strong>mean speed</strong> &lt; <strong>RMS (root-mean-square) speed</strong>. RMS speed is used directly in calculating pressure and kinetic energy.</p>
+
+    <h4>Mean Free Path</h4>
+    <p>Gas molecules don't travel far before colliding with another molecule — the mean free path is the average distance travelled between successive collisions. It depends on molecular size and gas density (more/bigger molecules packed tighter = shorter mean free path).</p>
+
+    <h4>Van der Waals Gas &amp; Real Gas Behaviour</h4>
+    <p>The ideal gas law assumes molecules have no volume and no attraction to each other — untrue for real gases, especially at high pressure/low temperature. The Van der Waals equation corrects for this by adding a volume correction (molecules do take up space) and a pressure correction (molecules do attract each other slightly, effectively reducing measured pressure).</p>`,
+    questions:[
+      {q:"According to the equipartition theorem, energy per degree of freedom is:", options:["kT","½kT","3kT","2kT"], a:1, e:"Each quadratic degree of freedom contributes ½kT."},
+      {q:"Degrees of freedom for a monoatomic gas:", options:["3","5","6","7"], a:0, e:"Only translational motion in 3 directions."},
+      {q:"RMS speed of gas molecules is:", options:["Less than mean speed","Greater than mean speed","Equal to most probable speed","Independent of temperature"], a:1, e:"Order is: most probable < mean < RMS speed."},
+      {q:"The Van der Waals equation corrects the ideal gas law for:", options:["Temperature only", "Molecular volume and intermolecular attraction", "Pressure only", "Entropy"], a:1, e:"It accounts for real molecular size and attraction forces."},
+      {q:"Mean free path is the average distance a molecule travels:", options:["In one second","Between successive collisions","To reach the container wall","At absolute zero"], a:1, e:"Definition of mean free path."}
+    ]
+  },
+  {
+    id:"sec-u10", label:"Unit 10", title:"Thermodynamics",
+    notes:`
+    <h4>Zeroth &amp; First Laws</h4>
+    <p>The zeroth law says if two systems are each in thermal equilibrium with a third, they're in equilibrium with each other — this justifies the concept of temperature itself. The first law, ΔU=Q−W, is just energy conservation: the change in internal energy equals heat added minus work done by the system.</p>
+
+    <h4>Thermodynamic Processes</h4>
+    <p><strong>Isothermal</strong> (constant temperature, so ΔU=0 for an ideal gas, meaning Q=W). <strong>Adiabatic</strong> (no heat exchange, Q=0, so all internal energy change becomes work). <strong>Isobaric</strong> (constant pressure). <strong>Isochoric</strong> (constant volume, so no work is done, W=0). Each has a distinct shape on a P-V diagram and a distinct relationship between P, V, T.</p>
+
+    <h4>Second Law &amp; Entropy</h4>
+    <p>Heat never spontaneously flows from cold to hot without external work — this directionality is captured by entropy, a measure of disorder/energy dispersal, which never decreases for an isolated system. A <strong>reversible</strong> process can be run backward with no net change to the universe (idealized, quasi-static, and frictionless); real processes are <strong>irreversible</strong>, always increasing total entropy.</p>
+
+    <h4>Carnot Cycle &amp; Heat Engines</h4>
+    <p>The Carnot cycle is an idealized, fully reversible engine cycle (2 isothermal + 2 adiabatic steps) that sets the theoretical maximum efficiency any heat engine can achieve between two temperatures: η = 1 − T_cold/T_hot (using absolute/Kelvin temperatures). No real engine can beat this, because real processes always involve some irreversibility.</p>
+
+    <h4>Thermodynamic Potentials &amp; Maxwell Relations</h4>
+    <p>Beyond internal energy, physicists define other useful energy-like quantities for different fixed conditions: enthalpy (useful at constant pressure), Helmholtz free energy (useful at constant temperature and volume), and Gibbs free energy (useful at constant temperature and pressure — this is what determines whether a chemical/phase change happens spontaneously). Maxwell's thermodynamic relations connect the derivatives of these potentials, letting you relate hard-to-measure quantities to easy-to-measure ones.</p>
+
+    <h4>Phase Transitions &amp; Clausius-Clapeyron Equation</h4>
+    <p>Phase transitions (melting, boiling) happen at specific temperature-pressure combinations. The Clausius-Clapeyron equation describes how the transition temperature changes with pressure (e.g., why water boils at a lower temperature at high altitude — directly relevant to atmospheric science).</p>
+
+    <h4>Statistical Mechanics: Micro/Macrostates &amp; Distributions</h4>
+    <p>A macrostate is the overall observable condition of a system (given P, V, T); a microstate is one specific arrangement of all individual particles that produces that macrostate — entropy is fundamentally a count of how many microstates correspond to a macrostate. Three statistical distributions describe how particles populate energy states: <strong>Maxwell-Boltzmann</strong> (classical, distinguishable particles), <strong>Fermi-Dirac</strong> (identical particles that obey the Pauli exclusion principle, like electrons — no two can occupy the same state), and <strong>Bose-Einstein</strong> (identical particles with no such restriction, like photons — any number can occupy the same state).</p>`,
+    questions:[
+      {q:"The first law of thermodynamics is a statement of:", options:["Entropy increase","Energy conservation","Heat engine efficiency","The zeroth law"], a:1, e:"ΔU = Q − W expresses energy conservation."},
+      {q:"Efficiency of a Carnot engine depends on:", options:["The working substance","Only the source and sink temperatures","Pressure","Volume"], a:1, e:"η = 1 − T_cold/T_hot, independent of the substance."},
+      {q:"Entropy of an isolated system:", options:["Always decreases","Always increases or stays the same","Is always zero","Is always constant"], a:1, e:"Second law of thermodynamics."},
+      {q:"Fermi-Dirac statistics apply to particles that:", options:["Obey the Pauli exclusion principle (e.g. electrons)","Are identical bosons","Have no spin","Are purely classical"], a:0, e:"Fermions like electrons follow Fermi-Dirac statistics."},
+      {q:"In an adiabatic process:", options:["Temperature is constant","No heat is exchanged","Pressure is constant","Volume is constant"], a:1, e:"Adiabatic means Q = 0."}
+    ]
+  },
+  {
+    id:"sec-u11", label:"Unit 11", title:"Modern Physics",
+    notes:`
+    <h4>Special Relativity Basics</h4>
+    <p>Galilean invariance is the everyday idea that the laws of physics look the same in any frame moving at constant velocity — but this breaks down for light. Einstein's special relativity keeps this idea but adds that the speed of light is the same for all observers, leading to strange but confirmed effects: time dilation (moving clocks run slow) and length contraction (moving objects appear shortened along motion direction), and the famous E=mc² mass-energy equivalence.</p>
+
+    <h4>Black Body Radiation &amp; the Birth of Quantum Theory</h4>
+    <p>Classical physics couldn't correctly predict the spectrum of radiation emitted by a hot object ("black body") — it predicted infinite energy at short wavelengths (the "ultraviolet catastrophe"). Planck resolved this by proposing energy is emitted in discrete packets (quanta), E=hf — the starting point of all quantum theory.</p>
+
+    <h4>Photoelectric Effect</h4>
+    <p>Light striking a metal surface can eject electrons, but only if the light's frequency exceeds a threshold — intensity doesn't matter if frequency is too low. This proved light behaves as particles (photons) with energy E=hf. Einstein's equation: KEmax = hf − φ, where φ (work function) is the minimum energy needed to free an electron from the metal.</p>
+
+    <h4>Compton Effect</h4>
+    <p>When X-rays scatter off electrons, their wavelength increases (energy decreases) — this is explained by treating the photon as a particle colliding with an electron, transferring momentum, exactly like a billiard-ball collision. This further confirmed light's particle nature.</p>
+
+    <h4>De Broglie Waves &amp; Wave-Particle Duality</h4>
+    <p>De Broglie proposed the reverse idea: if light (a wave) has particle properties, matter (particles) should have wave properties too. Every particle has an associated wavelength λ=h/p — significant for tiny particles like electrons, negligible for everyday objects.</p>
+
+    <h4>Heisenberg's Uncertainty Principle</h4>
+    <p>You cannot simultaneously know both the exact position and exact momentum of a particle — there's a fundamental limit, Δx·Δp ≥ ħ/2, that's not a measurement flaw but a real property of nature at quantum scales.</p>
+
+    <h4>Schrödinger Equation &amp; Quantum Systems</h4>
+    <p>The Schrödinger equation is quantum mechanics' central equation, describing how a particle's wavefunction evolves — solving it for specific situations gives quantized (discrete) energy levels: a <strong>particle in a box</strong> (1D/2D/3D) can only have specific allowed energies; a quantum <strong>harmonic oscillator</strong> also has evenly spaced discrete energy levels; a particle facing a <strong>potential step/barrier</strong> can "tunnel" through a barrier it classically shouldn't be able to cross (quantum tunneling — the basis of certain diodes and even nuclear alpha decay).</p>
+
+    <h4>Bohr Atom &amp; Atomic Spectra</h4>
+    <p>Bohr proposed electrons orbit the nucleus only in specific, quantized orbits with fixed energy — jumps between orbits emit or absorb a photon of a specific frequency, explaining the discrete lines seen in atomic spectra (rather than a continuous range).</p>
+
+    <h4>Pauli Exclusion Principle &amp; Nuclear Physics</h4>
+    <p>No two electrons in an atom can have identical sets of quantum numbers — this principle explains the entire structure of the periodic table. In the nucleus, mass and binding energy are related (some mass converts to the energy holding the nucleus together, per E=mc²) — this "missing mass" is why nuclear reactions release enormous energy.</p>
+
+    <h4>Radioactivity</h4>
+    <p>Unstable nuclei decay randomly but predictably in bulk, following N=N₀e^(−λt), where λ is the decay constant. Half-life (time for half the sample to decay) relates to λ by T½ = 0.693/λ. Radioactivity has both harmful (radiation exposure) and useful (medical imaging, carbon dating, power generation) applications.</p>`,
+    questions:[
+      {q:"Einstein's photoelectric equation is:", options:["E = hf − φ", "KEmax = hf − φ", "E = mc²", "E = hf/φ"], a:1, e:"Maximum kinetic energy of ejected electron equals photon energy minus work function."},
+      {q:"de Broglie wavelength is given by:", options:["λ = h/p","λ = hp","λ = p/h","λ = hc/p"], a:0, e:"Standard de Broglie relation."},
+      {q:"Heisenberg's uncertainty principle most classically pairs:", options:["Energy and time only","Position and momentum","Charge and mass","Frequency and wavelength"], a:1, e:"Δx·Δp ≥ ħ/2 is the classic form (an energy-time version also exists)."},
+      {q:"Half-life of a radioactive substance is the time in which:", options:["All nuclei decay","Half the nuclei decay","No nuclei decay","Mass doubles"], a:1, e:"By definition, half the original nuclei remain."},
+      {q:"Bohr's model explains:", options:["Continuous electron energy","Quantized energy levels in atoms","Wave nature of electrons","Nuclear fission"], a:1, e:"Bohr proposed discrete, quantized orbits/energy levels."}
+    ]
+  },
+  {
+    id:"sec-u12", label:"Unit 12", title:"Solid State Physics",
+    notes:`
+    <h4>Crystal Structure: Lattice, Basis &amp; Unit Cell</h4>
+    <p>A crystal is built from a repeating pattern: a mathematical <strong>lattice</strong> (a regular array of points in space) combined with a <strong>basis</strong> (the actual atom or group of atoms placed at each lattice point). The smallest repeating block that generates the whole lattice by translation is the <strong>unit cell</strong>, described by its lattice parameters (edge lengths and angles).</p>
+
+    <h4>Bravais Lattices &amp; Crystal Systems</h4>
+    <p>There are exactly 14 unique ways (Bravais lattices) to arrange points in 3D space that repeat perfectly — these are grouped into 7 crystal systems (cubic, tetragonal, orthorhombic, etc.) based on unit cell shape/symmetry.</p>
+
+    <h4>Miller Indices</h4>
+    <p>Miller indices (h k l) are a shorthand notation labeling the orientation of a crystal plane, based on where that plane intercepts the crystal axes (using reciprocals of the intercepts, cleared of fractions). They're essential for describing which planes are involved in diffraction or cleavage.</p>
+
+    <h4>X-ray Diffraction &amp; Bragg's Law</h4>
+    <p>Since X-ray wavelengths are comparable to the spacing between atomic planes, a crystal diffracts X-rays like a 3D grating. Bragg's law, nλ=2d sinθ, gives the condition for constructive interference (a strong diffracted beam) — from the angle where this occurs, you can calculate d, the spacing between atomic planes, revealing the crystal's internal structure.</p>
+
+    <h4>Band Theory of Solids</h4>
+    <p>In an isolated atom, electrons occupy discrete energy levels; when atoms bond together in a solid, these levels smear into continuous "bands" of allowed energy separated by "forbidden gaps." Whether a material conducts electricity depends on how these bands are filled and how big the gap is: <strong>conductors</strong> have overlapping/partially filled bands (electrons move freely); <strong>insulators</strong> have a large gap between a full valence band and empty conduction band (electrons can't jump across); <strong>semiconductors</strong> have a small gap (~1 eV), so a few electrons can be thermally excited across at room temperature.</p>
+
+    <h4>Fermi Energy &amp; Fermi Level</h4>
+    <p>Fermi energy is the highest energy level occupied by electrons at absolute zero temperature (in a conductor/metal). The Fermi level is a more general reference energy indicating the probability of occupation is 50% — in an intrinsic (pure) semiconductor, it sits approximately in the middle of the band gap.</p>
+
+    <h4>Intrinsic vs Extrinsic Semiconductors</h4>
+    <p>An <strong>intrinsic</strong> semiconductor is pure (like pure silicon), with equal numbers of thermally generated electrons and holes. An <strong>extrinsic</strong> semiconductor is deliberately "doped" with impurity atoms to boost either electron count (n-type, using donor impurities) or hole count (p-type, using acceptor impurities) — this controlled doping is what makes semiconductor devices possible. Conductivity increases with carrier concentration, and (unlike metals) semiconductor resistivity actually decreases as temperature rises, since more carriers get thermally excited.</p>`,
+    questions:[
+      {q:"Bragg's law is:", options:["nλ = 2d sinθ","nλ = d/sinθ","λ = 2d cosθ","nd = 2λ sinθ"], a:0, e:"Standard form of Bragg's diffraction condition."},
+      {q:"In an insulator, the energy gap between valence and conduction bands is:", options:["Zero","Very small","Very large","Negative"], a:2, e:"Large gap prevents easy electron promotion."},
+      {q:"Semiconductors typically have an energy gap of about:", options:["Zero","~1 eV","Over 5 eV","Undefined"], a:1, e:"Small gap (~1 eV) allows thermal excitation of carriers."},
+      {q:"Fermi level in an intrinsic semiconductor lies:", options:["At the conduction band","At the valence band","Approximately mid-gap","Outside the band gap"], a:2, e:"Symmetric carrier concentration places it near mid-gap."},
+      {q:"Miller indices are used to describe:", options:["Crystal planes","Electron spin","Magnetic moment","Thermal conductivity"], a:0, e:"They label orientation of crystal planes."}
+    ]
+  },
+  {
+    id:"sec-u13", label:"Unit 13", title:"Semiconductor Devices",
+    notes:`
+    <h4>PN Junction Diode</h4>
+    <p>Joining p-type and n-type semiconductor material creates a "depletion region" at the junction, where charge carriers have diffused across and cancelled out, leaving a small electric field. This makes the junction act as a one-way valve: <strong>forward bias</strong> (positive terminal to p-side) shrinks the depletion region and allows current to flow once a threshold voltage (~0.7V for silicon) is exceeded; <strong>reverse bias</strong> widens the depletion region and blocks current (except a tiny leakage current).</p>
+
+    <h4>Zener Diode</h4>
+    <p>A regular diode gets damaged in reverse breakdown, but a Zener diode is specifically designed to operate safely and repeatably in reverse breakdown at a precise voltage — making it ideal for <strong>voltage regulation</strong> (holding a steady output voltage regardless of small input fluctuations).</p>
+
+    <h4>Rectifiers</h4>
+    <p>A rectifier converts AC (alternating, both-direction current) to DC (one-direction current) by exploiting the diode's one-way conduction. A <strong>half-wave rectifier</strong> uses a single diode, passing only one half of the AC cycle (inefficient, high ripple). A <strong>full-wave rectifier</strong> uses two diodes (with a center-tapped transformer) or four diodes (bridge configuration) to use both halves of the AC cycle, giving smoother, more efficient DC output.</p>
+
+    <h4>Bipolar Junction Transistor (BJT)</h4>
+    <p>A BJT has three terminals — emitter, base, collector — and two junctions (either NPN or PNP). A small current at the base controls a much larger current between emitter and collector, which is how a transistor <strong>amplifies</strong> signals or acts as a switch.</p>
+
+    <h4>Transistor Configurations: CB, CE, CC</h4>
+    <p><strong>Common Base (CB):</strong> low current gain (close to 1), high voltage gain, low input impedance — used for high-frequency applications. <strong>Common Emitter (CE):</strong> the most widely used configuration — high current gain AND high voltage gain (hence high power gain), output is 180° out of phase with input. <strong>Common Collector (CC)</strong> (emitter follower): high current gain, voltage gain close to 1, high input impedance/low output impedance — used mainly for impedance matching/buffering, not amplification.</p>`,
+    questions:[
+      {q:"A PN junction diode conducts significantly when:", options:["Reverse biased","Forward biased beyond threshold voltage","Unbiased","Never"], a:1, e:"Forward bias beyond the threshold (~0.7V for Si) allows conduction."},
+      {q:"Zener diodes are mainly used for:", options:["Amplification","Voltage regulation","Rectification only","Oscillation"], a:1, e:"They operate safely in reverse breakdown to regulate voltage."},
+      {q:"A full-wave rectifier uses:", options:["1 diode","2 or 4 diodes","No diodes","A transistor only"], a:1, e:"Center-tap uses 2 diodes; bridge rectifier uses 4."},
+      {q:"In common-emitter (CE) configuration, current gain is:", options:["Less than 1","High","Always negative","Zero"], a:1, e:"CE gives the highest current and voltage gain of the three configurations."},
+      {q:"The three terminals of a BJT are:", options:["Source, gate, drain","Emitter, base, collector","Anode, cathode, gate","Input, output, ground"], a:1, e:"Standard BJT terminal names."}
+    ]
+  },
+  {
+    id:"sec-u14", label:"Unit 14", title:"Analog &amp; Digital Electronics",
+    notes:`
+    <h4>Amplifiers</h4>
+    <p>A <strong>single-stage amplifier</strong> uses one transistor to boost a signal's amplitude. A <strong>two-stage RC-coupled amplifier</strong> connects two amplifier stages through a capacitor (which blocks DC but passes AC), letting you multiply the gain of each stage together for much higher overall amplification — at the cost of some frequency response limitations from the coupling capacitor.</p>
+
+    <h4>Oscillators &amp; the Barkhausen Criterion</h4>
+    <p>An oscillator generates a repeating waveform with no external input signal, using positive feedback: a fraction of the output is fed back in phase with the input, sustaining continuous oscillation. The <strong>Barkhausen criterion</strong> states this requires the total loop gain to be exactly 1, with a total phase shift of 0° (or 360°) around the loop — if gain is less than 1, oscillation dies out; if more than 1, the signal keeps growing until distortion limits it.</p>
+
+    <h4>Operational Amplifiers (Op-Amps)</h4>
+    <p>An op-amp is a very high-gain differential amplifier. With external feedback components (resistors/capacitors), it becomes many different building blocks: an <strong>inverting amplifier</strong> (output 180° out of phase, gain set by resistor ratio), a <strong>non-inverting amplifier</strong> (output in phase with input), an <strong>integrator</strong> (output is the time-integral of the input, using a capacitor in the feedback path), and a <strong>differentiator</strong> (output is the rate of change of the input).</p>
+
+    <h4>Boolean Algebra &amp; Number Systems</h4>
+    <p>Digital electronics is built on binary (base-2) numbers — only 0s and 1s. Learn to convert between binary, decimal, and other bases, and how to add/subtract binary numbers directly (carrying works the same way as decimal addition, just with only two digits).</p>
+
+    <h4>Logic Gates</h4>
+    <p>Basic gates implement Boolean logic in hardware: <strong>AND</strong> (output 1 only if all inputs are 1), <strong>OR</strong> (output 1 if any input is 1), <strong>NOT</strong> (inverts the input), <strong>NAND</strong>/<strong>NOR</strong> (AND/OR followed by NOT — these are "universal gates," meaning any other gate can be built using only NANDs or only NORs), and <strong>XOR</strong> (output 1 only if inputs differ). Truth tables list every possible input combination and the resulting output, and are the standard way to define or verify any gate's behavior.</p>
+
+    <h4>De Morgan's Theorem</h4>
+    <p>De Morgan's theorem lets you convert between AND/OR expressions: NOT(A AND B) = (NOT A) OR (NOT B), and NOT(A OR B) = (NOT A) AND (NOT B). This is essential for simplifying logic circuits and converting a design to use only one type of universal gate.</p>`,
+    questions:[
+      {q:"The Barkhausen criterion for sustained oscillation requires loop gain:", options:["Less than 1","Exactly 1 with 0°/360° phase shift","Zero","Negative"], a:1, e:"Both magnitude and phase conditions must be met."},
+      {q:"An inverting amplifier's output is:", options:["In phase with the input","180° out of phase with the input","Always zero","Equal to the input"], a:1, e:"Defining feature of the inverting configuration."},
+      {q:"A NAND gate's output is 0 only when:", options:["All inputs are 0","All inputs are 1","Any one input is 1","Inputs differ"], a:1, e:"NAND is 0 only when every input is 1 (i.e., AND=1, NOT flips it to 0)."},
+      {q:"De Morgan's theorem states (A·B)′ equals:", options:["A′·B′","A′+B′","A+B","AB"], a:1, e:"NOT of AND equals OR of the NOTs."},
+      {q:"Binary number 1011 equals decimal:", options:["9","11","13","15"], a:1, e:"8+0+2+1 = 11."}
+    ]
+  }
+];
+
+let globalCorrect = 0, globalTotal = 0;
+
+function render(){
+  const content = document.getElementById('content');
+  DATA.forEach(sec => {
+    const secEl = document.createElement('section');
+    secEl.className = 'unit';
+    secEl.id = sec.id;
+
+    secEl.innerHTML = `
+      <div class="unit-label">${sec.label}</div>
+      <h2>${sec.title}</h2>
+      <div class="notes">${sec.notes}</div>
+      <div class="quiz-header">
+        <h3>Practice Questions</h3>
+        <span class="score-pill" id="${sec.id}-score">0 / ${sec.questions.length}</span>
+      </div>
+      <div class="questions" id="${sec.id}-questions"></div>
+    `;
+    content.appendChild(secEl);
+
+    const qContainer = secEl.querySelector(`#${sec.id}-questions`);
+    let sectionCorrect = 0;
+
+    sec.questions.forEach((q, qi) => {
+      const qEl = document.createElement('div');
+      qEl.className = 'question';
+      qEl.innerHTML = `
+        <div class="q-text">${qi+1}. ${q.q}</div>
+        <div class="options"></div>
+        <div class="explanation"></div>
+      `;
+      const optsEl = qEl.querySelector('.options');
+      const expEl = qEl.querySelector('.explanation');
+
+      q.options.forEach((opt, oi) => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => {
+          if (btn.classList.contains('answered-group')) return;
+          const allBtns = optsEl.querySelectorAll('.option');
+          allBtns.forEach(b => b.classList.add('disabled'));
+          allBtns[q.a].classList.add('correct');
+          if (oi !== q.a) btn.classList.add('incorrect');
+          expEl.textContent = q.e;
+          expEl.classList.add('show');
+
+          if (!qEl.dataset.scored) {
+            qEl.dataset.scored = "1";
+            globalTotal++;
+            document.getElementById('global-total').textContent = globalTotal;
+            if (oi === q.a) {
+              globalCorrect++;
+              sectionCorrect++;
+              document.getElementById('global-score').textContent = globalCorrect;
+              document.getElementById(`${sec.id}-score`).textContent = `${sectionCorrect} / ${sec.questions.length}`;
+            }
+          }
+          optsEl.classList.add('answered-group');
+        });
+        optsEl.appendChild(btn);
+      });
+      qContainer.appendChild(qEl);
+    });
+  });
+}
+render();
+
+// Sidebar nav highlight + smooth scroll
+const links = document.querySelectorAll('.nav-link');
+links.forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById(link.dataset.target).scrollIntoView({behavior:'smooth'});
+  });
+});
+const sections = document.querySelectorAll('section.unit');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting){
+      links.forEach(l => l.classList.toggle('active', l.dataset.target === entry.target.id));
+    }
+  });
+}, {rootMargin: '-20% 0px -70% 0px'});
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
