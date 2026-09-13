@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSC JE / IMD Scientific Assistant — Physics Prep</title>
+<style>
+  :root{
+    --navy:#12283B;
+    --navy-deep:#0B1B29;
+    --teal:#3E8FB0;
+    --amber:#E8A33D;
+    --red:#C1503F;
+    --green:#3D8361;
+    --paper:#F4F2ED;
+    --card:#FFFFFF;
+    --ink:#182430;
+    --muted:#5B6B78;
+    --line:#E1DDD3;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.55;
+  }
+  h1,h2,h3{
+    font-family: Georgia, 'Iowan Old Style', serif;
+    font-weight:600;
+    color:var(--navy-deep);
+    letter-spacing:0.01em;
+  }
+  a{color:var(--teal);}
+  .layout{display:flex; min-height:100vh;}
+
+  /* Sidebar */
+  .sidebar{
+    width:270px;
+    flex-shrink:0;
+    background:var(--navy);
+    color:#EAF1F6;
+    padding:24px 18px;
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+  }
+  .brand{font-family:Georgia, serif; font-size:1.15rem; font-weight:700; color:#fff; margin-bottom:2px;}
+  .brand-sub{font-size:0.78rem; color:#9FB4C4; margin-bottom:22px;}
+  .nav-group{margin-bottom:6px;}
+  .nav-group-title{
+    font-size:0.72rem;
+    color:#7C93A4;
+    margin:18px 0 6px 4px;
+  }
+  .nav-link{
+    display:block;
+    padding:7px 10px;
+    border-radius:7px;
+    color:#D7E4EC;
+    text-decoration:none;
+    font-size:0.88rem;
+    margin-bottom:2px;
+    cursor:pointer;
+    border-left:3px solid transparent;
+  }
+  .nav-link:hover{background:rgba(255,255,255,0.06);}
+  .nav-link.active{background:rgba(232,163,61,0.14); border-left:3px solid var(--amber); color:#fff;}
+
+  /* Main */
+  .main{flex:1; padding:0; max-width:900px;}
+  .hero{
+    background:linear-gradient(180deg, var(--navy) 0%, #1B3A52 55%, #2E5A73 100%);
+    color:#fff;
+    padding:56px 48px 40px;
+  }
+  .hero h1{color:#fff; font-size:2rem; margin:0 0 10px;}
+  .hero p{color:#CFE0E8; max-width:60ch; margin:0 0 18px; font-size:0.98rem;}
+  .honesty-note{
+    background:rgba(255,255,255,0.08);
+    border-left:3px solid var(--amber);
+    padding:12px 16px;
+    border-radius:6px;
+    font-size:0.85rem;
+    color:#EFE6D2;
+    max-width:64ch;
+  }
+
+  .content{padding:36px 48px 80px;}
+  section.unit{margin-bottom:52px; scroll-margin-top:20px;}
+  .unit-label{font-size:0.78rem; color:var(--muted); margin-bottom:4px;}
+  .unit h2{font-size:1.5rem; margin:0 0 14px;}
+  .notes{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px 22px;
+    margin-bottom:20px;
+    font-size:0.94rem;
+  }
+  .notes ul{margin:8px 0; padding-left:20px;}
+  .notes strong{color:var(--navy-deep);}
+
+  .quiz-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+  }
+  .quiz-header h3{font-size:1.05rem; margin:0; color:var(--navy-deep);}
+  .score-pill{
+    font-size:0.8rem;
+    background:var(--navy);
+    color:#fff;
+    padding:4px 10px;
+    border-radius:20px;
+  }
+
+  .question{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px 18px;
+    margin-bottom:14px;
+  }
+  .q-text{font-size:0.94rem; margin-bottom:10px; font-weight:600;}
+  .options{display:flex; flex-direction:column; gap:8px;}
+  .option{
+    text-align:left;
+    padding:9px 12px;
+    border-radius:7px;
+    border:1px solid var(--line);
+    background:#FBFAF7;
+    cursor:pointer;
+    font-size:0.9rem;
+    color:var(--ink);
+  }
+  .option:hover{border-color:var(--teal);}
+  .option.correct{background:#E4F3EA; border-color:var(--green); color:#1E4A32; font-weight:600;}
+  .option.incorrect{background:#FBE9E6; border-color:var(--red); color:#6B241A;}
+  .option.disabled{cursor:default;}
+  .explanation{
+    margin-top:10px;
+    font-size:0.85rem;
+    color:var(--muted);
+    background:#F6F5F1;
+    border-radius:6px;
+    padding:8px 12px;
+    display:none;
+  }
+  .explanation.show{display:block;}
+
+  .top-progress{
+    position:sticky; top:0; z-index:5;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    padding:10px 48px;
+    font-size:0.82rem;
+    color:var(--muted);
+  }
+  footer{padding:30px 48px 60px; color:var(--muted); font-size:0.82rem; border-top:1px solid var(--line);}
+
+  @media(max-width:800px){
+    .layout{flex-direction:column;}
+    .sidebar{width:100%; height:auto; position:relative;}
+    .hero, .content{padding-left:22px; padding-right:22px;}
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <nav class="sidebar" id="sidebar">
+    <div class="brand">SSC JE · IMD Physics</div>
+    <div class="brand-sub">Scientific Assistant (Part-F) prep notes</div>
+
+    <div class="nav-group-title">Paper 1 — Common</div>
+    <a class="nav-link" data-target="sec-reasoning">Reasoning &amp; Awareness</a>
+
+    <div class="nav-group-title">Physics — Part F</div>
+    <a class="nav-link" data-target="sec-u1">1. Mathematical Methods</a>
+    <a class="nav-link" data-target="sec-u2">2. Mechanics</a>
+    <a class="nav-link" data-target="sec-u3">3. Properties of Matter</a>
+    <a class="nav-link" data-target="sec-u4">4. Oscillations</a>
+    <a class="nav-link" data-target="sec-u5">5. Waves</a>
+    <a class="nav-link" data-target="sec-u6">6. Optics</a>
+    <a class="nav-link" data-target="sec-u7">7. Electricity</a>
+    <a class="nav-link" data-target="sec-u8">8. Magnetism</a>
+    <a class="nav-link" data-target="sec-u9">9. Kinetic Theory</a>
+    <a class="nav-link" data-target="sec-u10">10. Thermodynamics</a>
+    <a class="nav-link" data-target="sec-u11">11. Modern Physics</a>
+    <a class="nav-link" data-target="sec-u12">12. Solid State Physics</a>
+    <a class="nav-link" data-target="sec-u13">13. Semiconductor Devices</a>
+    <a class="nav-link" data-target="sec-u14">14. Analog &amp; Digital Electronics</a>
+  </nav>
+
+  <div class="main">
+    <div class="hero">
+      <h1>Scientific Assistant (IMD) — Physics Prep</h1>
+      <p>Complete Part-F syllabus, unit by unit, with plain-language explanations and practice MCQs with instant feedback.</p>
+      <div class="honesty-note">
+        This exam stream is new for 2026, so no genuine "5-year official PYQ" set exists for this exact paper yet. The MCQs here are original practice questions written to match the real syllabus and the difficulty level of similar exams (GATE/CSIR-NET Physics, older SSC JE papers) — not copied leaked papers.
+      </div>
+    </div>
+
+    <div class="top-progress">Total score this session: <span id="global-score">0</span> / <span id="global-total">0</span> answered correctly</div>
+
+    <div class="content" id="content"></div>
+
+    <footer>Built for personal exam prep. Static file — safe to host on your own site.</footer>
+  </div>
+</div>
+
+<script>
+const DATA = [
+  {
+    id:"sec-reasoning",
+    label:"Paper 1",
+    title:"General Intelligence, Reasoning &amp; General Awareness",
+    notes:`
+      <p><strong>Reasoning</strong>: analogies, number series, coding-decoding, blood relations, direction sense, classification. The trick for every type: write it down on paper, don't solve in your head — draw family trees for blood relations, draw a compass for direction questions.</p>
+      <p><strong>General Awareness</strong>: current affairs (last 6–12 months), Polity, Geography, History, Economy, and everyday science. Since this is IMD, revise basic meteorology facts too (monsoon system, IMD's role) — genuinely useful and exam-relevant.</p>`,
+    questions:[
+      {q:"Doctor : Hospital :: Teacher : ?", options:["Chalk","School","Student","Book"], a:1, e:"A professional works at their workplace."},
+      {q:"3 : 9 :: 5 : ?", options:["10","15","20","25"], a:3, e:"Pattern is n : n² (5²=25)."},
+      {q:"2, 6, 12, 20, 30, ?", options:["40","42","44","36"], a:1, e:"Differences: 4,6,8,10,12 → 30+12=42."},
+      {q:"If SUN is coded as TVO, how is MOON coded?", options:["NPPO","NPPP","NPOO","NQPO"], a:0, e:"Each letter shifts +1: S→T,U→V,N→O. So M→N,O→P,O→P,N→O = NPPO."},
+      {q:"A is B's brother. C is B's mother. D is C's father. How is A related to D?", options:["Son","Grandson","Nephew","Cousin"], a:1, e:"A is C's child; D is C's father, so D is A's grandfather → A is D's grandson."},
+      {q:"Who is known as the Father of the Indian Constitution?", options:["Mahatma Gandhi","Dr. B.R. Ambedkar","Jawaharlal Nehru","Sardar Patel"], a:1, e:"Dr. B.R. Ambedkar chaired the Drafting Committee."},
+      {q:"Which agency is responsible for weather forecasting in India?", options:["ISRO","IMD","DRDO","CSIR"], a:1, e:"India Meteorological Department, under Ministry of Earth Sciences."},
+      {q:"The southwest monsoon typically first arrives over Kerala around:", options:["Early June","Early March","Late October","Early January"], a:0, e:"Onset over Kerala is usually around June 1."}
+    ]
+  },
+  {
+    id:"sec-u1", label:"Unit 1", title:"Mathematical Methods",
+    notes:`<p>This unit is your toolbox for every other unit. Focus on: differentiating/integrating common functions, basic differential equations (used in SHM), vectors (dot &amp; cross product), and complex numbers (used in AC circuits and quantum physics).</p>
+    <ul><li>d/dx(sin x) = cos x, d/dx(cos x) = −sin x</li><li>∫xⁿdx = xⁿ⁺¹/(n+1)</li><li>A·B = |A||B|cosθ (scalar); A×B = |A||B|sinθ (vector)</li><li>|a+ib| = √(a²+b²)</li></ul>`,
+    questions:[
+      {q:"d/dx (sin x · cos x) = ?", options:["cos 2x","-sin 2x","sin²x","cos²x"], a:0, e:"Product rule gives cos²x − sin²x = cos 2x."},
+      {q:"∫₀^π sin(x) dx = ?", options:["0","1","2","π"], a:2, e:"Standard integral evaluates to 2."},
+      {q:"If A = 3i + 4j, |A| = ?", options:["5","7","12","25"], a:0, e:"√(3²+4²) = 5."},
+      {q:"A · B = 0 means the vectors are:", options:["Parallel","Perpendicular","Equal","Opposite"], a:1, e:"Dot product is zero when angle is 90°."},
+      {q:"The modulus of the complex number 3+4i is:", options:["3","4","5","7"], a:2, e:"√(3²+4²) = 5."}
+    ]
+  },
+  {
+    id:"sec-u2", label:"Unit 2", title:"Mechanics",
+    notes:`<p>Mechanics studies how and why things move. Newton's 3 laws are the base. Rotational motion mirrors linear motion (mass → moment of inertia, velocity → angular velocity). Central force and Kepler's laws explain planetary motion.</p>
+    <ul><li>F = ma; momentum conserved with no external force</li><li>Centripetal force = mv²/r</li><li>Moment of inertia: disc ½MR², ring MR², solid sphere ⅖MR²</li><li>Kepler's 3rd law: T² ∝ r³</li><li>Elastic collision: momentum AND KE conserved; inelastic: only momentum</li></ul>`,
+    questions:[
+      {q:"A 2 kg mass moving at 3 m/s sticks to a stationary 1 kg mass. Final velocity?", options:["1 m/s","2 m/s","3 m/s","4 m/s"], a:1, e:"Momentum: 2×3 = 3×v → v = 2 m/s."},
+      {q:"Moment of inertia of a solid sphere about its diameter:", options:["MR²","½MR²","⅖MR²","⅔MR²"], a:2, e:"Standard result for a solid sphere."},
+      {q:"Coriolis force arises due to:", options:["Gravity","Earth's rotation","Friction","Air resistance"], a:1, e:"Very relevant for IMD — it's why cyclones curve."},
+      {q:"Kepler's second law states:", options:["Equal areas in equal time","T²∝r³","Orbits are elliptical","F∝1/r²"], a:0, e:"The law of areas — planet sweeps equal area in equal time."},
+      {q:"In an elastic collision:", options:["Only momentum is conserved","Only KE is conserved","Both momentum and KE are conserved","Neither is conserved"], a:2, e:"Defining feature of an elastic collision."},
+      {q:"Centripetal acceleration for radius r, speed v is:", options:["v/r","v²/r","vr","v²r"], a:1, e:"Standard formula a = v²/r."}
+    ]
+  },
+  {
+    id:"sec-u3", label:"Unit 3", title:"General Properties of Matter",
+    notes:`<p>Covers how solids and liquids stretch, flow, and resist flow. Elasticity is how solids return to shape. Surface tension explains droplets. Viscosity resists flow. Bernoulli connects pressure and fluid speed — relevant conceptually to atmospheric flow.</p>
+    <ul><li>Young's modulus Y = stress/strain</li><li>Stokes' law: F = 6πηrv</li><li>Continuity: A₁v₁ = A₂v₂</li><li>Bernoulli: P + ½ρv² + ρgh = constant</li></ul>`,
+    questions:[
+      {q:"Bernoulli's theorem is based on conservation of:", options:["Momentum","Energy","Mass","Charge"], a:1, e:"It's essentially energy conservation for flowing fluids."},
+      {q:"If a pipe narrows, fluid velocity:", options:["Increases","Decreases","Stays same","Becomes zero"], a:0, e:"From the equation of continuity A₁v₁=A₂v₂."},
+      {q:"Surface tension is responsible for:", options:["Capillary rise","Viscosity","Elasticity","Diffusion"], a:0, e:"Capillary action arises from surface tension effects."},
+      {q:"Stokes' law gives viscous force on a:", options:["Flat plate","Sphere moving through a fluid","Cylinder","Cube"], a:1, e:"F = 6πηrv applies to a sphere."},
+      {q:"Young's modulus is the ratio of:", options:["Shear stress to shear strain","Longitudinal stress to longitudinal strain","Pressure to volume strain","Force to area"], a:1, e:"Defines Young's modulus specifically."}
+    ]
+  },
+  {
+    id:"sec-u4", label:"Unit 4", title:"Oscillations",
+    notes:`<p>SHM is motion where the restoring force is proportional to displacement (and opposite in direction). Energy oscillates between KE and PE, total stays constant. Damped oscillations lose amplitude over time due to friction. Resonance happens when driving frequency matches natural frequency — amplitude peaks.</p>
+    <ul><li>ω = 2π/T = √(k/m)</li><li>Energy in SHM = ½kA²</li><li>Higher Q factor = sharper, narrower resonance</li></ul>`,
+    questions:[
+      {q:"Time period of SHM depends on:", options:["Amplitude","Mass and spring constant","Initial phase","Total energy"], a:1, e:"T = 2π√(m/k), independent of amplitude."},
+      {q:"At the mean position in SHM, kinetic energy is:", options:["Zero","Maximum","Minimum but not zero","Equal to PE"], a:1, e:"All energy is kinetic at the mean position."},
+      {q:"Resonance occurs when:", options:["Driving frequency = 0","Driving frequency = natural frequency","Damping is maximum","Amplitude is zero"], a:1, e:"Maximum amplitude response occurs at this match."},
+      {q:"Phase difference between velocity and displacement in SHM is:", options:["0","π/2","π","2π"], a:1, e:"Velocity leads displacement by 90°."},
+      {q:"A higher Q factor means:", options:["More damping","A sharper resonance peak","Lower amplitude","No oscillation"], a:1, e:"Q measures sharpness of the resonance curve."}
+    ]
+  },
+  {
+    id:"sec-u5", label:"Unit 5", title:"Waves",
+    notes:`<p>A wave carries energy, not matter. Standing waves form from two opposite-travelling waves superposing — nodes (no motion) and antinodes (max motion). Doppler effect explains why frequency appears to change with relative motion — this is literally how weather radar measures wind/rain movement.</p>
+    <ul><li>v = fλ</li><li>Doppler: f' = f(v±v₀)/(v∓vₛ)</li></ul>`,
+    questions:[
+      {q:"If frequency doubles and wave speed is constant, wavelength:", options:["Doubles","Halves","Stays same","Quadruples"], a:1, e:"From v=fλ, λ and f are inversely related."},
+      {q:"Nodes in a standing wave are points of:", options:["Maximum amplitude","Zero amplitude","Maximum energy","Maximum velocity"], a:1, e:"Nodes are points that never move."},
+      {q:"The Doppler effect explains:", options:["Change in wave speed","Apparent frequency change due to relative motion","Wave interference","Diffraction"], a:1, e:"Classic definition of the Doppler effect."},
+      {q:"Sound waves in air are:", options:["Transverse","Longitudinal","Electromagnetic","Polarized"], a:1, e:"Sound propagates via compressions and rarefactions."},
+      {q:"Group velocity refers to:", options:["Velocity of an individual wave","Velocity of a wave packet/envelope","Always equal to phase velocity","Speed of light"], a:1, e:"Group velocity is the speed of the overall envelope/packet."}
+    ]
+  },
+  {
+    id:"sec-u6", label:"Unit 6", title:"Optics",
+    notes:`<p>Geometrical optics uses the mirror/lens formula with sign conventions. Wave optics covers interference (Young's double slit), diffraction (spreading around obstacles), and resolving power (finer detail with larger aperture/shorter wavelength — key for telescopes). Polarization restricts light's oscillation to one plane.</p>`,
+    questions:[
+      {q:"The mirror formula is:", options:["1/v + 1/u = 1/f","1/v − 1/u = 1/f","v + u = f","vu = f"], a:0, e:"Standard mirror/lens formula."},
+      {q:"Young's double slit experiment demonstrates:", options:["Diffraction","Interference","Polarization","Dispersion"], a:1, e:"It's the classic interference experiment."},
+      {q:"Resolving power of a telescope increases with:", options:["Smaller aperture","Larger aperture","Longer wavelength","Lower magnification"], a:1, e:"Larger aperture improves resolving power."},
+      {q:"Malus's law relates to:", options:["Diffraction","Polarization intensity","Refraction","Interference"], a:1, e:"Malus's law gives transmitted intensity through a polarizer."},
+      {q:"A diffraction grating produces:", options:["A single bright spot","Multiple sharp bright fringes","No pattern","Continuous spectrum only"], a:1, e:"Multiple slits create sharp, well-separated maxima."}
+    ]
+  },
+  {
+    id:"sec-u7", label:"Unit 7", title:"Electricity",
+    notes:`<p>Coulomb's law gives force between charges; Gauss's law relates flux to enclosed charge (powerful for symmetric objects). Capacitors store charge (C=Q/V). In AC circuits, resonance in an LCR circuit occurs when inductive and capacitive reactance are equal.</p>`,
+    questions:[
+      {q:"Coulomb's law force is proportional to:", options:["Product of charges / r","Product of charges / r²","Sum of charges / r²","Charges × r²"], a:1, e:"Inverse-square law, like gravitation."},
+      {q:"Gauss's law relates electric flux to:", options:["Electric field alone","Enclosed charge","Potential","Capacitance"], a:1, e:"Flux through a closed surface = enclosed charge / ε₀."},
+      {q:"In series combination, capacitance:", options:["Adds directly","Has reciprocals add","Stays same","Becomes zero"], a:1, e:"1/C_total = 1/C1 + 1/C2 + ..."},
+      {q:"At resonance in an LCR circuit:", options:["XL > XC","XL < XC","XL = XC","R = 0"], a:2, e:"Resonance condition is XL = XC."},
+      {q:"Ohm's law states:", options:["V = IR","V = I/R","V = I²R","I = VR"], a:0, e:"Basic relation between voltage, current, and resistance."}
+    ]
+  },
+  {
+    id:"sec-u8", label:"Unit 8", title:"Magnetism",
+    notes:`<p>Moving charges create magnetic fields (Biot-Savart, Ampere's law). The Lorentz force governs motion of a charge in a magnetic field, producing circular paths. Faraday's law (changing flux induces EMF) is the basis of generators. Maxwell's equations unify electricity and magnetism and predict EM waves.</p>`,
+    questions:[
+      {q:"The Lorentz force on a moving charge in a magnetic field is:", options:["qE","qv×B","qvB²","qB/v"], a:1, e:"F = qv×B is the magnetic part of the Lorentz force."},
+      {q:"Faraday's law states EMF is induced due to:", options:["Constant magnetic flux","Changing magnetic flux","Constant current","Zero flux"], a:1, e:"EMF = -dΦ/dt, requires a changing flux."},
+      {q:"Maxwell's equations predict the existence of:", options:["Sound waves","Electromagnetic waves","Gravitational waves","Matter waves"], a:1, e:"They show EM waves travel at the speed of light."},
+      {q:"The Poynting vector represents:", options:["Charge density","Direction and magnitude of EM energy flow","Magnetic field only","Electric potential"], a:1, e:"S = E×B/μ₀ gives energy flux of an EM wave."},
+      {q:"Self-inductance opposes:", options:["Change in current","Change in voltage","Resistance","Capacitance"], a:0, e:"Lenz's law: induced EMF opposes the change causing it."}
+    ]
+  },
+  {
+    id:"sec-u9", label:"Unit 9", title:"Kinetic Theory",
+    notes:`<p>Gas is modelled as many tiny particles in random motion; pressure results from wall collisions. The equipartition theorem gives each degree of freedom ½kT of energy. Maxwell's distribution describes the spread of molecular speeds. Real gases deviate from ideal behaviour — the Van der Waals equation corrects for this.</p>`,
+    questions:[
+      {q:"According to the equipartition theorem, energy per degree of freedom is:", options:["kT","½kT","3kT","2kT"], a:1, e:"Each quadratic degree of freedom contributes ½kT."},
+      {q:"Degrees of freedom for a monoatomic gas:", options:["3","5","6","7"], a:0, e:"Only translational motion in 3 directions."},
+      {q:"RMS speed of gas molecules is:", options:["Less than mean speed","Greater than mean speed","Equal to most probable speed","Independent of temperature"], a:1, e:"Order is: most probable < mean < RMS speed."},
+      {q:"The Van der Waals equation corrects the ideal gas law for:", options:["Temperature only", "Molecular volume and intermolecular attraction", "Pressure only", "Entropy"], a:1, e:"It accounts for real molecular size and attraction forces."},
+      {q:"Mean free path is the average distance a molecule travels:", options:["In one second","Between successive collisions","To reach the container wall","At absolute zero"], a:1, e:"Definition of mean free path."}
+    ]
+  },
+  {
+    id:"sec-u10", label:"Unit 10", title:"Thermodynamics",
+    notes:`<p>The first law is energy conservation (ΔU = Q − W). The second law says entropy of an isolated system never decreases. Carnot's engine sets the maximum possible efficiency between two temperatures. Fermi-Dirac statistics apply to electrons (which obey the Pauli exclusion principle); Bose-Einstein applies to particles like photons that don't.</p>`,
+    questions:[
+      {q:"The first law of thermodynamics is a statement of:", options:["Entropy increase","Energy conservation","Heat engine efficiency","The zeroth law"], a:1, e:"ΔU = Q − W expresses energy conservation."},
+      {q:"Efficiency of a Carnot engine depends on:", options:["The working substance","Only the source and sink temperatures","Pressure","Volume"], a:1, e:"η = 1 − T_cold/T_hot, independent of the substance."},
+      {q:"Entropy of an isolated system:", options:["Always decreases","Always increases or stays the same","Is always zero","Is always constant"], a:1, e:"Second law of thermodynamics."},
+      {q:"Fermi-Dirac statistics apply to particles that:", options:["Obey the Pauli exclusion principle (e.g. electrons)","Are identical bosons","Have no spin","Are purely classical"], a:0, e:"Fermions like electrons follow Fermi-Dirac statistics."},
+      {q:"In an adiabatic process:", options:["Temperature is constant","No heat is exchanged","Pressure is constant","Volume is constant"], a:1, e:"Adiabatic means Q = 0."}
+    ]
+  },
+  {
+    id:"sec-u11", label:"Unit 11", title:"Modern Physics",
+    notes:`<p>The photoelectric effect shows light behaves as particles (photons). de Broglie extended wave nature to matter. The uncertainty principle limits how precisely position and momentum can both be known. Radioactive decay follows N = N₀e^(−λt), with half-life T½ = 0.693/λ.</p>`,
+    questions:[
+      {q:"Einstein's photoelectric equation is:", options:["E = hf − φ", "KEmax = hf − φ", "E = mc²", "E = hf/φ"], a:1, e:"Maximum kinetic energy of ejected electron equals photon energy minus work function."},
+      {q:"de Broglie wavelength is given by:", options:["λ = h/p","λ = hp","λ = p/h","λ = hc/p"], a:0, e:"Standard de Broglie relation."},
+      {q:"Heisenberg's uncertainty principle most classically pairs:", options:["Energy and time only","Position and momentum","Charge and mass","Frequency and wavelength"], a:1, e:"Δx·Δp ≥ ħ/2 is the classic form (an energy-time version also exists)."},
+      {q:"Half-life of a radioactive substance is the time in which:", options:["All nuclei decay","Half the nuclei decay","No nuclei decay","Mass doubles"], a:1, e:"By definition, half the original nuclei remain."},
+      {q:"Bohr's model explains:", options:["Continuous electron energy","Quantized energy levels in atoms","Wave nature of electrons","Nuclear fission"], a:1, e:"Bohr proposed discrete, quantized orbits/energy levels."}
+    ]
+  },
+  {
+    id:"sec-u12", label:"Unit 12", title:"Solid State Physics",
+    notes:`<p>Crystals are a repeating lattice plus a basis. Miller indices label crystal planes. Bragg's law (nλ = 2d sinθ) is used in X-ray diffraction to measure atomic spacing. Band theory explains why materials are conductors, semiconductors, or insulators based on the gap between valence and conduction bands.</p>`,
+    questions:[
+      {q:"Bragg's law is:", options:["nλ = 2d sinθ","nλ = d/sinθ","λ = 2d cosθ","nd = 2λ sinθ"], a:0, e:"Standard form of Bragg's diffraction condition."},
+      {q:"In an insulator, the energy gap between valence and conduction bands is:", options:["Zero","Very small","Very large","Negative"], a:2, e:"Large gap prevents easy electron promotion."},
+      {q:"Semiconductors typically have an energy gap of about:", options:["Zero","~1 eV","Over 5 eV","Undefined"], a:1, e:"Small gap (~1 eV) allows thermal excitation of carriers."},
+      {q:"Fermi level in an intrinsic semiconductor lies:", options:["At the conduction band","At the valence band","Approximately mid-gap","Outside the band gap"], a:2, e:"Symmetric carrier concentration places it near mid-gap."},
+      {q:"Miller indices are used to describe:", options:["Crystal planes","Electron spin","Magnetic moment","Thermal conductivity"], a:0, e:"They label orientation of crystal planes."}
+    ]
+  },
+  {
+    id:"sec-u13", label:"Unit 13", title:"Semiconductor Devices",
+    notes:`<p>A PN junction forms a depletion region that lets current flow in one direction (diode). Zener diodes are used for voltage regulation. Rectifiers convert AC to DC. A BJT (transistor) amplifies current and has three configurations — CB, CE, CC — each with different gain and impedance characteristics.</p>`,
+    questions:[
+      {q:"A PN junction diode conducts significantly when:", options:["Reverse biased","Forward biased beyond threshold voltage","Unbiased","Never"], a:1, e:"Forward bias beyond the threshold (~0.7V for Si) allows conduction."},
+      {q:"Zener diodes are mainly used for:", options:["Amplification","Voltage regulation","Rectification only","Oscillation"], a:1, e:"They operate safely in reverse breakdown to regulate voltage."},
+      {q:"A full-wave rectifier uses:", options:["1 diode","2 or 4 diodes","No diodes","A transistor only"], a:1, e:"Center-tap uses 2 diodes; bridge rectifier uses 4."},
+      {q:"In common-emitter (CE) configuration, current gain is:", options:["Less than 1","High","Always negative","Zero"], a:1, e:"CE gives the highest current and voltage gain of the three configurations."},
+      {q:"The three terminals of a BJT are:", options:["Source, gate, drain","Emitter, base, collector","Anode, cathode, gate","Input, output, ground"], a:1, e:"Standard BJT terminal names."}
+    ]
+  },
+  {
+    id:"sec-u14", label:"Unit 14", title:"Analog &amp; Digital Electronics",
+    notes:`<p>An op-amp is a high-gain amplifier that, with feedback, becomes an inverting/non-inverting amplifier, integrator, or differentiator. Oscillators need positive feedback satisfying the Barkhausen criterion. In digital electronics, logic gates implement Boolean algebra, and De Morgan's theorem converts between AND/OR combinations.</p>`,
+    questions:[
+      {q:"The Barkhausen criterion for sustained oscillation requires loop gain:", options:["Less than 1","Exactly 1 with 0°/360° phase shift","Zero","Negative"], a:1, e:"Both magnitude and phase conditions must be met."},
+      {q:"An inverting amplifier's output is:", options:["In phase with the input","180° out of phase with the input","Always zero","Equal to the input"], a:1, e:"Defining feature of the inverting configuration."},
+      {q:"A NAND gate's output is 0 only when:", options:["All inputs are 0","All inputs are 1","Any one input is 1","Inputs differ"], a:1, e:"NAND is 0 only when every input is 1 (i.e., AND=1, NOT flips it to 0)."},
+      {q:"De Morgan's theorem states (A·B)′ equals:", options:["A′·B′","A′+B′","A+B","AB"], a:1, e:"NOT of AND equals OR of the NOTs."},
+      {q:"Binary number 1011 equals decimal:", options:["9","11","13","15"], a:1, e:"8+0+2+1 = 11."}
+    ]
+  }
+];
+
+let globalCorrect = 0, globalTotal = 0;
+
+function render(){
+  const content = document.getElementById('content');
+  DATA.forEach(sec => {
+    const secEl = document.createElement('section');
+    secEl.className = 'unit';
+    secEl.id = sec.id;
+
+    secEl.innerHTML = `
+      <div class="unit-label">${sec.label}</div>
+      <h2>${sec.title}</h2>
+      <div class="notes">${sec.notes}</div>
+      <div class="quiz-header">
+        <h3>Practice Questions</h3>
+        <span class="score-pill" id="${sec.id}-score">0 / ${sec.questions.length}</span>
+      </div>
+      <div class="questions" id="${sec.id}-questions"></div>
+    `;
+    content.appendChild(secEl);
+
+    const qContainer = secEl.querySelector(`#${sec.id}-questions`);
+    let sectionCorrect = 0;
+
+    sec.questions.forEach((q, qi) => {
+      const qEl = document.createElement('div');
+      qEl.className = 'question';
+      qEl.innerHTML = `
+        <div class="q-text">${qi+1}. ${q.q}</div>
+        <div class="options"></div>
+        <div class="explanation"></div>
+      `;
+      const optsEl = qEl.querySelector('.options');
+      const expEl = qEl.querySelector('.explanation');
+
+      q.options.forEach((opt, oi) => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => {
+          if (btn.classList.contains('answered-group')) return;
+          const allBtns = optsEl.querySelectorAll('.option');
+          allBtns.forEach(b => b.classList.add('disabled'));
+          allBtns[q.a].classList.add('correct');
+          if (oi !== q.a) btn.classList.add('incorrect');
+          expEl.textContent = q.e;
+          expEl.classList.add('show');
+
+          if (!qEl.dataset.scored) {
+            qEl.dataset.scored = "1";
+            globalTotal++;
+            document.getElementById('global-total').textContent = globalTotal;
+            if (oi === q.a) {
+              globalCorrect++;
+              sectionCorrect++;
+              document.getElementById('global-score').textContent = globalCorrect;
+              document.getElementById(`${sec.id}-score`).textContent = `${sectionCorrect} / ${sec.questions.length}`;
+            }
+          }
+          optsEl.classList.add('answered-group');
+        });
+        optsEl.appendChild(btn);
+      });
+      qContainer.appendChild(qEl);
+    });
+  });
+}
+render();
+
+// Sidebar nav highlight + smooth scroll
+const links = document.querySelectorAll('.nav-link');
+links.forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById(link.dataset.target).scrollIntoView({behavior:'smooth'});
+  });
+});
+const sections = document.querySelectorAll('section.unit');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting){
+      links.forEach(l => l.classList.toggle('active', l.dataset.target === entry.target.id));
+    }
+  });
+}, {rootMargin: '-20% 0px -70% 0px'});
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
